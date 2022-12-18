@@ -1,10 +1,19 @@
 import { useEffect, useState } from 'react';
 import makeCalendar from '../utils/makeCalendar';
 import type { Calendar } from '../type';
+import { AiFillCaretLeft, AiFillCaretRight } from 'react-icons/ai';
 
 const Calendar = () => {
   const [date, setDate] = useState(new Date());
   const [calendarData, setCalendarData] = useState<Calendar>();
+
+  const moveToPrevMonth = () => {
+    setDate(new Date(date.getFullYear(), date.getMonth() - 1));
+  };
+
+  const moveToNextMonth = () => {
+    setDate(new Date(date.getFullYear(), date.getMonth() + 1));
+  };
 
   useEffect(() => {
     setCalendarData(makeCalendar(date.getFullYear(), date.getMonth()));
@@ -12,8 +21,14 @@ const Calendar = () => {
 
   return (
     <div>
-      <h1>
+      <h1 className='mb-5 flex items-center gap-2 text-2xl'>
+        <button onClick={moveToPrevMonth}>
+          <AiFillCaretLeft />
+        </button>
         {date.getFullYear()}년 {date.getMonth() + 1}월
+        <button onClick={moveToNextMonth}>
+          <AiFillCaretRight />
+        </button>
       </h1>
       <table>
         <thead>
