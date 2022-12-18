@@ -20,15 +20,20 @@ const makeCalendar = (year: number, month: number): Calendar => {
     for (let j = 0; j < 7; j++) {
       if (startDay <= curDay && curDate < endDate) {
         curDate++;
-        curWeekData.push(curDate);
+        curWeekData.push({ date: curDate });
       } else {
-        curWeekData.push(0);
+        curWeekData.push({ date: 0 });
       }
       curDay++;
     }
     calendar.push(curWeekData);
   }
 
+  const now = new Date();
+  if (now.getFullYear() === year && now.getMonth() === month) {
+    const todayOrder = now.getDate() + startDay - 1;
+    calendar[Math.floor(todayOrder / 7)][todayOrder % 7].isToday = true;
+  }
   return calendar;
 };
 
