@@ -1,7 +1,7 @@
 ---
-name: "\U0001F528 Refactor: "
+name: Refactor
 about: Refactor
-title: ''
+title: "\U0001F528 Refactor: "
 labels: ''
 assignees: SunghyeonMoon
 

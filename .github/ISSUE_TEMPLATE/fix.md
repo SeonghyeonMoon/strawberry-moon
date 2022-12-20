@@ -1,7 +1,7 @@
 ---
-name: "\U0001F41B Fix: "
+name: Fix
 about: Fix
-title: ''
+title: "\U0001F41B Fix: "
 labels: "\U0001F41B Fix"
 assignees: SunghyeonMoon
 

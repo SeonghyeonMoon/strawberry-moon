@@ -1,7 +1,7 @@
 ---
-name: "✨Feature: "
+name: Feature
 about: Feature
-title: ''
+title: "✨ Feature: "
 labels: "✨ Feature"
 assignees: SunghyeonMoon
 
