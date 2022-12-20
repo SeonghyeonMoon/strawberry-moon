@@ -4,25 +4,25 @@ import makeCalendar from '../utils/makeCalendar';
 import type { Calendar } from '../type';
 
 const Calendar = () => {
-  const [date, setDate] = useState(new Date());
+  const [dateData, setDateData] = useState(new Date());
   const [calendarData, setCalendarData] = useState<Calendar>();
 
   const moveToPrevMonth = () => {
-    setDate(new Date(date.getFullYear(), date.getMonth() - 1));
+    setDateData(new Date(dateData.getFullYear(), dateData.getMonth() - 1));
   };
 
   const moveToNextMonth = () => {
-    setDate(new Date(date.getFullYear(), date.getMonth() + 1));
+    setDateData(new Date(dateData.getFullYear(), dateData.getMonth() + 1));
   };
 
   useEffect(() => {
-    setCalendarData(makeCalendar(date.getFullYear(), date.getMonth()));
-  }, [date]);
+    setCalendarData(makeCalendar(dateData.getFullYear(), dateData.getMonth()));
+  }, [dateData]);
 
   return (
-    <div className='mx-auto mt-7 flex w-1/2 flex-col'>
+    <div className='mx-auto mt-5 flex w-full flex-col p-5'>
       <CalendarHeader
-        date={date}
+        date={dateData}
         moveToPrevMonth={moveToPrevMonth}
         moveToNextMonth={moveToNextMonth}
       />
@@ -32,7 +32,13 @@ const Calendar = () => {
           {calendarData?.map((week, index) => (
             <tr key={index}>
               {week?.map(({ date, isToday }, index) => (
-                <Td key={index} index={index} date={date} isToday={isToday} />
+                <Td
+                  key={index}
+                  index={index}
+                  dateData={dateData}
+                  date={date}
+                  isToday={isToday}
+                />
               ))}
             </tr>
           ))}
