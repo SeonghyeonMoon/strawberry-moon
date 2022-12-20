@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
+import { CalendarHeader, Days, Td } from '../components/calendar';
 import makeCalendar from '../utils/makeCalendar';
 import type { Calendar } from '../type';
-import { CalendarHeader, Days, Td } from '../components/calendar';
 
 const Calendar = () => {
   const [date, setDate] = useState(new Date());
