@@ -1,6 +1,8 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import { makeNextDate, makePrevDate } from '../../utils/makeDateToString';
 
 type Grade = 'special' | 'good' | 'normal';
 type GradeData = { label: string; price: string; count: string };
@@ -12,6 +14,16 @@ const Date = () => {
     good: { label: '상', price: '0', count: '0' },
     normal: { label: '보통', price: '0', count: '0' },
   });
+
+  const prevDate = useMemo(
+    () => makePrevDate(router.query.date as string),
+    [router.query.date],
+  );
+
+  const nextDate = useMemo(
+    () => makeNextDate(router.query.date as string),
+    [router.query.date],
+  );
 
   const handleChange = (grade: Grade) => (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -33,9 +45,19 @@ const Date = () => {
 
   return (
     <form className='flex w-full flex-col gap-2 py-8 px-4'>
-      <h1 className='mb-4 gap-2 text-center text-xl font-bold'>
+      <h1 className='mb-8 flex items-center justify-center justify-between gap-7 text-2xl'>
+        <button>
+          <Link href={`/form/${prevDate}`}>
+            <AiOutlineLeft />
+          </Link>
+        </button>
         {router.query.date?.slice(0, 4)}년 {router.query.date?.slice(4, 6)}월{' '}
-        {router.query.date?.slice(6, 8)}일
+        {router.query.date?.slice(6)}일
+        <button>
+          <Link href={`/form/${nextDate}`}>
+            <AiOutlineRight />
+          </Link>
+        </button>
       </h1>
       <table className='mb-4'>
         <thead>
