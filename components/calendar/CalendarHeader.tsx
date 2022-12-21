@@ -12,7 +12,7 @@ const CalendarHeader = ({
   moveToNextMonth,
 }: CalendarHeaderProps) => {
   return (
-    <h1 className='mb-5 flex items-center justify-center gap-7 text-2xl'>
+    <h1 className='mb-8 flex items-center justify-center justify-between gap-7 text-2xl'>
       <button onClick={moveToPrevMonth}>
         <AiOutlineLeft />
       </button>
