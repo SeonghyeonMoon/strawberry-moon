@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { makeDateToString } from '../../utils/makeDateToString';
 
 type TdProps = {
   index: number;
@@ -15,11 +16,7 @@ const Td = ({ index, dateData, date, isToday }: TdProps) => {
         ${index === 0 ? 'text-red-600' : ''} 
         ${index === 6 ? 'text-blue-600' : ''}`}
     >
-      <Link
-        href={`/form/${dateData.getFullYear()}${
-          dateData.getMonth() + 1
-        }${date}`}
-      >
+      <Link href={`/form/${makeDateToString(dateData, date)}`}>
         {date ? (
           isToday ? (
             <span
