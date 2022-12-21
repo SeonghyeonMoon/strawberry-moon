@@ -5,14 +5,14 @@ import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { makeNextDate, makePrevDate } from '../../utils/makeDateToString';
 
 type Grade = 'special' | 'good' | 'normal';
-type GradeData = { label: string; price: string; count: string };
+type GradeData = { label: string; price: number; count: number };
 
 const Date = () => {
   const router = useRouter();
   const [formData, setFormData] = useState<Record<Grade, GradeData>>({
-    special: { label: '특', price: '0', count: '0' },
-    good: { label: '상', price: '0', count: '0' },
-    normal: { label: '보통', price: '0', count: '0' },
+    special: { label: '특', price: 0, count: 0 },
+    good: { label: '상', price: 0, count: 0 },
+    normal: { label: '보통', price: 0, count: 0 },
   });
 
   const prevDate = useMemo(
@@ -26,11 +26,10 @@ const Date = () => {
   );
 
   const handleChange = (grade: Grade) => (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const onlyNumber = value.replace(/[^0-9]/g, '');
-    const removedCommaValue = Number(onlyNumber.replaceAll(',', ''));
+    const { id, value } = e.target;
+    const onlyNumber = Number(value.replace(/[^0-9]/g, ''));
 
-    if (removedCommaValue > 9999) {
+    if (onlyNumber > 9999) {
       return;
     }
 
@@ -72,33 +71,34 @@ const Date = () => {
           {Object.entries(formData).map(([grade, { label, price, count }]) => (
             <tr key={grade} className='border text-left'>
               <td className='w-10 border p-2'>{label}</td>
-              <td className='w-16 border p-2'>
+              <td className='relative w-16 border p-2'>
+                <label htmlFor='count' className='absolute'>
+                  {count.toLocaleString()}
+                </label>
                 <input
                   type='text'
-                  className='w-full focus:border-black focus:outline-none'
-                  name='count'
+                  className='w-full opacity-0 '
+                  id='count'
                   autoComplete='off'
                   value={count}
                   onChange={handleChange(grade as Grade)}
                 />
               </td>
-              <td className='w-16 border p-2'>
+              <td className='relative w-16 border p-2'>
+                <label htmlFor='price' className='absolute'>
+                  {price.toLocaleString()}
+                </label>
                 <input
                   type='text'
-                  className='w-full focus:border-black focus:outline-none'
-                  name='price'
+                  className='w-full opacity-0'
+                  id='price'
                   autoComplete='off'
                   value={price}
                   onChange={handleChange(grade as Grade)}
                 />
               </td>
               <td className='w-24 border p-2'>
-                <span>
-                  {(
-                    Number(count.replaceAll(',', '')) *
-                    Number(price.replaceAll(',', ''))
-                  ).toLocaleString()}
-                </span>
+                <span>{(count * price).toLocaleString()}</span>
               </td>
             </tr>
           ))}
