@@ -18,6 +18,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       res
         .status(400)
         .json({ error: '올바르지 않은 월 형식의 파라미터입니다.' });
+      return;
     }
     res
       .status(200)
@@ -30,10 +31,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === 'POST') {
     const dateCheckReg = /^[0-9]{8}$/;
-    if (!dateCheckReg.test(req.body.date as string)) {
+    if (!dateCheckReg.test(req.body.month as string)) {
       res
         .status(400)
         .json({ error: '올바르지 않은 일 형식의 쿼리요청입니다.' });
+      return;
     }
     const index = count.findIndex(({ date }) => date === req.body.date);
     if (index === -1) {
