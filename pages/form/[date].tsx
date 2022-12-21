@@ -25,6 +25,20 @@ const Date = () => {
     [router.query.date],
   );
 
+  const { mutate } = useMutation(
+    ['count', router.query.date?.slice(4, 6)],
+    async () => {
+      return axios
+        .post('http://localhost:3000/api/count', {
+          date: router.query.date,
+          special: formData.special.count,
+          good: formData.good.count,
+          normal: formData.normal.count,
+        })
+        .then((res) => res.data);
+    },
+  );
+
   const handleChange = (grade: Grade) => (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     const onlyNumber = Number(value.replace(/[^0-9]/g, ''));
@@ -37,13 +51,21 @@ const Date = () => {
       ...formData,
       [grade]: {
         ...formData[grade],
-        [name]: removedCommaValue.toLocaleString(),
+        [id]: onlyNumber,
       },
     });
   };
 
+  const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    mutate();
+  };
+
   return (
-    <form className='flex w-full flex-col gap-2 py-8 px-4'>
+    <form
+      className='flex w-full flex-col gap-2 py-8 px-4'
+      onSubmit={handleSubmit}
+    >
       <h1 className='mb-8 flex items-center justify-center justify-between gap-7 text-2xl'>
         <button>
           <Link href={`/form/${prevDate}`}>
