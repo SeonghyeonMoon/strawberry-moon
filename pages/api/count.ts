@@ -31,7 +31,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
 
   if (req.method === 'POST') {
     const dateCheckReg = /^[0-9]{8}$/;
-    if (!dateCheckReg.test(req.body.month as string)) {
+    if (!dateCheckReg.test(req.body.date as string)) {
       res
         .status(400)
         .json({ error: '올바르지 않은 일 형식의 쿼리요청입니다.' });
