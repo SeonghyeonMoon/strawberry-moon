@@ -6,6 +6,14 @@ const getMonthStartDay = (year: number, month: number) =>
 const getMonthEndDate = (year: number, month: number) =>
   new Date(year, month + 1, 0).getDate();
 
+export const getWeekNumber = (date: string) => {
+  const startDay = getMonthStartDay(
+    Number(date.slice(0, 4)),
+    Number(date.slice(4, 6)) - 1,
+  );
+  return Math.ceil((Number(date.slice(6, 8)) + startDay) / 7);
+};
+
 const makeCalendar = (year: number, month: number): Calendar => {
   const startDay = getMonthStartDay(year, month);
   const endDate = getMonthEndDate(year, month);
