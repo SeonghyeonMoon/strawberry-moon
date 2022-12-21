@@ -1,6 +1,8 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import { makeNextDate, makePrevDate } from '../../utils/makeDateToString';
 
@@ -14,6 +16,40 @@ const Date = () => {
     good: { label: '상', price: 0, count: 0 },
     normal: { label: '보통', price: 0, count: 0 },
   });
+
+  useQuery(
+    ['count', router.query.date],
+    () =>
+      axios
+        .get(`http://localhost:3000/api/count?date=${router.query.date}`)
+        .then((res) => res.data),
+    {
+      enabled: !!router.query.date,
+      onSuccess: (data) => {
+        setFormData({
+          special: {
+            label: '특',
+            price: 0,
+            count: data.special,
+          },
+          good: { label: '상', price: 0, count: data.good },
+          normal: {
+            label: '보통',
+            price: 0,
+            count: data.normal,
+          },
+        });
+      },
+      onError: () => {
+        setFormData({
+          special: { label: '특', price: 0, count: 0 },
+          good: { label: '상', price: 0, count: 0 },
+          normal: { label: '보통', price: 0, count: 0 },
+        });
+      },
+      retry: false,
+    },
+  );
 
   const prevDate = useMemo(
     () => router.query.date && makePrevDate(router.query.date as string),
