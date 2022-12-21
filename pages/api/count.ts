@@ -12,21 +12,38 @@ const count = [
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'GET') {
-    const { month } = req.query;
-    const monthCheckReg = /^[0-9]{6}$/;
-    if (!monthCheckReg.test(month as string)) {
+    const { month, date } = req.query;
+    if (month) {
+      const monthCheckReg = /^[0-9]{6}$/;
+      if (!monthCheckReg.test(month as string)) {
+        res
+          .status(400)
+          .json({ error: '올바르지 않은 월 형식의 파라미터입니다.' });
+        return;
+      }
       res
-        .status(400)
-        .json({ error: '올바르지 않은 월 형식의 파라미터입니다.' });
+        .status(200)
+        .json(
+          count
+            .filter(({ date }) => date.startsWith(month as string))
+            .sort((a, b) => (Number(a.date) - Number(b.date) > 0 ? 1 : -1)),
+        );
       return;
     }
-    res
-      .status(200)
-      .json(
-        count
-          .filter(({ date }) => date.startsWith(month as string))
-          .sort((a, b) => (Number(a.date) - Number(b.date) > 0 ? 1 : -1)),
-      );
+    if (date) {
+      const dateCheckReg = /^[0-9]{8}$/;
+      if (!dateCheckReg.test(date as string)) {
+        res
+          .status(400)
+          .json({ error: '올바르지 않은 일 형식의 파라미터입니다.' });
+        return;
+      }
+      const result = count.find(({ date: dateData }) => dateData === date);
+      if (result) {
+        res.status(200).json(result);
+      }
+      res.status(404).json({ error: '해당 날짜의 데이터가 없습니다.' });
+    }
   }
 
   if (req.method === 'POST') {
