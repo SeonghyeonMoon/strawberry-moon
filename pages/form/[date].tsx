@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import { getWeekNumber } from '../../utils/makeCalendar';
 import { makeNextDate, makePrevDate } from '../../utils/makeDateToString';
 
 type Grade = 'special' | 'good' | 'normal';
@@ -26,26 +27,67 @@ const Date = () => {
     {
       enabled: !!router.query.date,
       onSuccess: (data) => {
-        setFormData({
+        setFormData((prevState) => ({
           special: {
-            label: '특',
-            price: 0,
+            ...prevState.special,
             count: data.special,
           },
-          good: { label: '상', price: 0, count: data.good },
+          good: { ...prevState.good, count: data.good },
           normal: {
-            label: '보통',
-            price: 0,
+            ...prevState.normal,
             count: data.normal,
           },
-        });
+        }));
       },
       onError: () => {
-        setFormData({
-          special: { label: '특', price: 0, count: 0 },
-          good: { label: '상', price: 0, count: 0 },
-          normal: { label: '보통', price: 0, count: 0 },
-        });
+        setFormData((prevState) => ({
+          special: { ...prevState.special, count: 0 },
+          good: { ...prevState.good, count: 0 },
+          normal: { ...prevState.normal, count: 0 },
+        }));
+      },
+      retry: false,
+    },
+  );
+
+  useQuery(
+    ['price', router.query.date],
+    () =>
+      axios
+        .get('http://localhost:3000/api/price', {
+          params: {
+            month: router.query.date?.slice(0, 6),
+            week: getWeekNumber(router.query.date as string),
+          },
+        })
+        .then((res) => res.data),
+    {
+      enabled: !!router.query.date,
+      onSuccess: (data) => {
+        setFormData((prevState) => ({
+          special: {
+            ...prevState.special,
+            price: data.special,
+          },
+          good: { ...prevState.good, price: data.good },
+          normal: {
+            ...prevState.normal,
+            price: data.normal,
+          },
+        }));
+      },
+      onError: () => {
+        setFormData((prevState) => ({
+          special: {
+            ...prevState.special,
+            price: 0,
+          },
+          good: { ...prevState.good, price: 0 },
+          normal: {
+            ...prevState.normal,
+            price: 0,
+          },
+        }));
       },
       retry: false,
     },
