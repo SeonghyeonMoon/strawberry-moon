@@ -16,12 +16,12 @@ const Date = () => {
   });
 
   const prevDate = useMemo(
-    () => makePrevDate(router.query.date as string),
+    () => router.query.date && makePrevDate(router.query.date as string),
     [router.query.date],
   );
 
   const nextDate = useMemo(
-    () => makeNextDate(router.query.date as string),
+    () => router.query.date && makeNextDate(router.query.date as string),
     [router.query.date],
   );
 
