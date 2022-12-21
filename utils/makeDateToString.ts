@@ -17,6 +17,8 @@ export const makeNextDate = (date: string): string => {
 export const makeDateToString = (dateData: Date, date?: number): string => {
   const year = dateData.getFullYear();
   const month = dateData.getMonth() + 1;
-  const day = date ? String(date).padStart(2, '0') : dateData.getDate();
+  const day = date
+    ? String(date).padStart(2, '0')
+    : String(dateData.getDate()).padStart(2, '0');
   return `${year}${month}${day}`;
 };
