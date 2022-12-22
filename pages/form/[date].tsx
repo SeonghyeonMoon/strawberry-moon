@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import useCountQuery from '../../hooks/useCountQuery';
 import { getWeekNumber } from '../../utils/makeCalendar';
 import { makeNextDate, makePrevDate } from '../../utils/makeDateToString';
 
@@ -18,37 +19,7 @@ const Date = () => {
     normal: { label: '보통', price: 0, count: 0 },
   });
 
-  useQuery(
-    ['count', router.query.date],
-    () =>
-      axios
-        .get(`http://localhost:3000/api/count?date=${router.query.date}`)
-        .then((res) => res.data),
-    {
-      enabled: !!router.query.date,
-      onSuccess: (data) => {
-        setFormData((prevState) => ({
-          special: {
-            ...prevState.special,
-            count: data.special,
-          },
-          good: { ...prevState.good, count: data.good },
-          normal: {
-            ...prevState.normal,
-            count: data.normal,
-          },
-        }));
-      },
-      onError: () => {
-        setFormData((prevState) => ({
-          special: { ...prevState.special, count: 0 },
-          good: { ...prevState.good, count: 0 },
-          normal: { ...prevState.normal, count: 0 },
-        }));
-      },
-      retry: false,
-    },
-  );
+  useCountQuery({ date: router.query.date as string, setFormData });
 
   useQuery(
     ['price', router.query.date],
