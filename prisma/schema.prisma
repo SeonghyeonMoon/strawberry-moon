@@ -3,24 +3,25 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 model Count {
-  id Int @id @default(autoincrement())
-  date String @unique
-  special Int @default(0)
-  good Int @default(0)
-  normal Int @default(0)
+  id      Int    @id @default(autoincrement())
+  date    String @unique
+  special Int    @default(0)
+  good    Int    @default(0)
+  normal  Int    @default(0)
 }
 
 model Price {
-  id Int @id @default(autoincrement())
-  month String
-  week Int
-  special Int @default(0)
-  good Int @default(0)
-  normal Int @default(0)
+  id      Int    @id @default(autoincrement())
+  month   String
+  week    Int
+  special Int    @default(0)
+  good    Int    @default(0)
+  normal  Int    @default(0)
+
   @@unique([month, week])
 }
