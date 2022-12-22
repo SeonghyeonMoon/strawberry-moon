@@ -1,15 +1,13 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import useCountQuery from '../../hooks/useCountQuery';
-import { getWeekNumber } from '../../utils/makeCalendar';
+import usePriceQuery from '../../hooks/usePriceQuery';
 import { makeNextDate, makePrevDate } from '../../utils/makeDateToString';
-
-type Grade = 'special' | 'good' | 'normal';
-type GradeData = { label: string; price: number; count: number };
+import type { Grade, GradeData } from '../../type';
 
 const Date = () => {
   const router = useRouter();
@@ -20,49 +18,7 @@ const Date = () => {
   });
 
   useCountQuery({ date: router.query.date as string, setFormData });
-
-  useQuery(
-    ['price', router.query.date],
-    () =>
-      axios
-        .get('http://localhost:3000/api/price', {
-          params: {
-            month: router.query.date?.slice(0, 6),
-            week: getWeekNumber(router.query.date as string),
-          },
-        })
-        .then((res) => res.data),
-    {
-      enabled: !!router.query.date,
-      onSuccess: (data) => {
-        setFormData((prevState) => ({
-          special: {
-            ...prevState.special,
-            price: data.special,
-          },
-          good: { ...prevState.good, price: data.good },
-          normal: {
-            ...prevState.normal,
-            price: data.normal,
-          },
-        }));
-      },
-      onError: () => {
-        setFormData((prevState) => ({
-          special: {
-            ...prevState.special,
-            price: 0,
-          },
-          good: { ...prevState.good, price: 0 },
-          normal: {
-            ...prevState.normal,
-            price: 0,
-          },
-        }));
-      },
-      retry: false,
-    },
-  );
+  usePriceQuery({ date: router.query.date as string, setFormData });
 
   const prevDate = useMemo(
     () => router.query.date && makePrevDate(router.query.date as string),
