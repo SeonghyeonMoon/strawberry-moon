@@ -6,6 +6,7 @@ import axios from 'axios';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import useCountQuery from '../../hooks/useCountQuery';
 import usePriceQuery from '../../hooks/usePriceQuery';
+import { getWeekNumber } from '../../utils/makeCalendar';
 import { makeNextDate, makePrevDate } from '../../utils/makeDateToString';
 import type { Grade, GradeData } from '../../type';
 
@@ -30,7 +31,7 @@ const Date = () => {
     [router.query.date],
   );
 
-  const { mutate } = useMutation(
+  const { mutate: mutateCount } = useMutation(
     ['count', router.query.date?.slice(4, 6)],
     async () => {
       return axios
@@ -39,6 +40,21 @@ const Date = () => {
           special: formData.special.count,
           good: formData.good.count,
           normal: formData.normal.count,
+        })
+        .then((res) => res.data);
+    },
+  );
+
+  const { mutate: mutatePrice } = useMutation(
+    ['price', router.query.date?.slice(4, 6)],
+    async () => {
+      return axios
+        .post('http://localhost:3000/api/price', {
+          month: router.query.date?.slice(0, 6),
+          week: getWeekNumber(router.query.date as string),
+          special: formData.special.price,
+          good: formData.good.price,
+          normal: formData.normal.price,
         })
         .then((res) => res.data);
     },
@@ -63,7 +79,8 @@ const Date = () => {
 
   const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutate();
+    mutateCount();
+    mutatePrice();
   };
 
   return (
