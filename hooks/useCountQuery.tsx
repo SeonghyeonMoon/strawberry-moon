@@ -11,10 +11,7 @@ type UseCountQueryProps = {
 const useCountQuery = ({ date, setFormData }: UseCountQueryProps) => {
   useQuery(
     ['count', date],
-    () =>
-      axios
-        .get(`http://localhost:3000/api/count?date=${date}`)
-        .then((res) => res.data),
+    () => axios.get(`/api/count?date=${date}`).then((res) => res.data),
     {
       enabled: !!date,
       onSuccess: (data) => {

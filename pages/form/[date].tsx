@@ -35,7 +35,7 @@ const Date = () => {
     ['count', router.query.date?.slice(4, 6)],
     async () => {
       return axios
-        .post('http://localhost:3000/api/count', {
+        .post('/api/count', {
           date: router.query.date,
           special: formData.special.count,
           good: formData.good.count,
@@ -49,7 +49,7 @@ const Date = () => {
     ['price', router.query.date?.slice(4, 6)],
     async () => {
       return axios
-        .post('http://localhost:3000/api/price', {
+        .post('/api/price', {
           month: router.query.date?.slice(0, 6),
           week: getWeekNumber(router.query.date as string),
           special: formData.special.price,

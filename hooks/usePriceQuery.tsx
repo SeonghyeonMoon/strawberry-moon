@@ -14,7 +14,7 @@ const usePriceQuery = ({ date, setFormData }: UsePriceQueryProps) => {
     ['price', date],
     () =>
       axios
-        .get('http://localhost:3000/api/price', {
+        .get('/api/price', {
           params: {
             month: date?.slice(0, 6),
             week: getWeekNumber(date),
