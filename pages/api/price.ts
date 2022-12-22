@@ -1,16 +1,10 @@
+import { prisma } from '../../prisma/prisma';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const price = [
-  {
-    month: '202212',
-    week: 2,
-    special: 1489,
-    good: 1322,
-    normal: 0,
-  },
-];
-
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method === 'GET') {
     const { month, week } = req.query;
     const monthCheckReg = /^[0-9]{6}$/;
@@ -20,23 +14,19 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         .json({ error: '올바르지 않은 월 형식의 파라미터입니다.' });
     }
     if (week) {
-      const result = price.find(
-        (priceData) =>
-          priceData.month === month && priceData.week === Number(week),
-      );
+      const result = await prisma.price.findUnique({
+        where: { month_week: { month: month as string, week: Number(week) } },
+      });
       if (result) {
         return res.status(200).json(result);
       }
       return res.status(404).json({ error: '해당 날짜의 데이터가 없습니다.' });
     }
     if (month) {
-      return res
-        .status(200)
-        .json(
-          price
-            .filter((priceData) => priceData.month.startsWith(month as string))
-            .sort((a, b) => a.week - b.week),
-        );
+      const result = await prisma.price.findMany({
+        where: { month: month as string },
+      });
+      return res.status(200).json(result);
     }
   }
   if (req.method === 'POST') {
@@ -46,14 +36,22 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         .status(400)
         .json({ error: '올바르지 않은 일 형식의 쿼리요청입니다.' });
     }
-    const index = price.findIndex(
-      ({ month, week }) => month === req.body.month && week === req.body.week,
-    );
-    if (index === -1) {
-      price.push(req.body);
+
+    const result = await prisma.price.findUnique({
+      where: {
+        month_week: { month: req.body.month, week: req.body.week },
+      },
+    });
+
+    let newData;
+    if (!result) {
+      newData = await prisma.price.create({ data: req.body });
     } else {
-      price.splice(index, 1, req.body);
+      newData = await prisma.price.update({
+        where: { month_week: { month: req.body.month, week: req.body.week } },
+        data: req.body,
+      });
     }
-    return res.status(201).json(req.body);
+    return res.status(201).json(newData);
   }
 }

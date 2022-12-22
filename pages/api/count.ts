@@ -1,16 +1,10 @@
+import { prisma } from '../../prisma/prisma';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const count = [
-  { date: '20221205', special: 1220, good: 20, normal: 0 },
-  {
-    date: '20221207',
-    special: 810,
-    good: 15,
-    normal: 0,
-  },
-];
-
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method === 'GET') {
     const { month, date } = req.query;
     if (month) {
@@ -20,13 +14,10 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           .status(400)
           .json({ error: '올바르지 않은 월 형식의 파라미터입니다.' });
       }
-      return res
-        .status(200)
-        .json(
-          count
-            .filter(({ date }) => date.startsWith(month as string))
-            .sort((a, b) => (Number(a.date) - Number(b.date) > 0 ? 1 : -1)),
-        );
+      const result = await prisma.count.findMany({
+        where: { date: { startsWith: month as string } },
+      });
+      return res.status(200).json(result);
     }
     if (date) {
       const dateCheckReg = /^[0-9]{8}$/;
@@ -35,7 +26,9 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           .status(400)
           .json({ error: '올바르지 않은 일 형식의 파라미터입니다.' });
       }
-      const result = count.find(({ date: dateData }) => dateData === date);
+      const result = await prisma.count.findUnique({
+        where: { date: date as string },
+      });
       if (result) {
         return res.status(200).json(result);
       }
@@ -50,12 +43,22 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
         .status(400)
         .json({ error: '올바르지 않은 일 형식의 쿼리요청입니다.' });
     }
-    const index = count.findIndex(({ date }) => date === req.body.date);
-    if (index === -1) {
-      count.push(req.body);
+    const result = await prisma.count.findUnique({
+      where: {
+        date: req.body.date,
+      },
+    });
+    let newData;
+    if (!result) {
+      newData = await prisma.count.create({ data: req.body });
     } else {
-      count.splice(index, 1, req.body);
+      newData = await prisma.count.update({
+        where: {
+          date: req.body.date,
+        },
+        data: req.body,
+      });
     }
-    return res.status(201).json(req.body);
+    return res.status(201).json(newData);
   }
 }
