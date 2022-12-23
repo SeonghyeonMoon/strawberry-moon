@@ -6,6 +6,7 @@ import useCountMutate from '../../hooks/useCountMutate';
 import useCountQuery from '../../hooks/useCountQuery';
 import usePriceMutate from '../../hooks/usePriceMutate';
 import usePriceQuery from '../../hooks/usePriceQuery';
+import useSwipe from '../../hooks/useSwipe';
 import { makeNextDate, makePrevDate } from '../../utils/makeDateToString';
 import type { Grade, GradeData } from '../../type';
 
@@ -29,6 +30,11 @@ const Date = () => {
     () => router.query.date && makeNextDate(router.query.date as string),
     [router.query.date],
   );
+
+  useSwipe({
+    handleSwipeRight: () => router.push(`/form/${prevDate}`),
+    handleSwipeLeft: () => router.push(`/form/${nextDate}`),
+  });
 
   const { mutatePrice } = usePriceMutate({
     date: router.query.date as string,
