@@ -63,6 +63,13 @@ const MonthCountChart = ({ date }: MonthCountChartProps) => {
 
   return (
     <Line
+      options={{
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
+      }}
       data={{
         labels: Array.from({ length: lastDate }, (_, i) => i + 1),
         datasets: [
