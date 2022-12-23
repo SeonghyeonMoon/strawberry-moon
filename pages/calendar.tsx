@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { CalendarHeader, Days, Td } from '../components/calendar';
+import useSwipe from '../hooks/useSwipe';
 import makeCalendar from '../utils/makeCalendar';
 import type { Calendar } from '../type';
 
@@ -14,6 +15,11 @@ const Calendar = () => {
   const moveToNextMonth = () => {
     setDateData(new Date(dateData.getFullYear(), dateData.getMonth() + 1));
   };
+
+  useSwipe({
+    handleSwipeRight: moveToPrevMonth,
+    handleSwipeLeft: moveToNextMonth,
+  });
 
   useEffect(() => {
     setCalendarData(makeCalendar(dateData.getFullYear(), dateData.getMonth()));
