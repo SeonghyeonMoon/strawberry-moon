@@ -1,8 +1,13 @@
 import { useEffect, useState } from 'react';
+import { CategoryScale } from 'chart.js';
+import Chart from 'chart.js/auto';
 import { CalendarHeader, Days, Td } from '../components/calendar';
+import MonthCountChart from '../components/MonthCountChart';
 import useSwipe from '../hooks/useSwipe';
 import makeCalendar from '../utils/makeCalendar';
 import type { Calendar } from '../type';
+
+Chart.register(CategoryScale);
 
 const Calendar = () => {
   const [dateData, setDateData] = useState(new Date());
@@ -50,6 +55,9 @@ const Calendar = () => {
           ))}
         </tbody>
       </table>
+      <MonthCountChart
+        date={`${dateData.getFullYear()}${dateData.getMonth() + 1}`}
+      />
     </div>
   );
 };
