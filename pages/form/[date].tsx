@@ -52,9 +52,7 @@ const Date = () => {
 
   const handleChange = (grade: Grade) => (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    const onlyNumber = Number(value.replace(/[^0-9]/g, ''));
-
-    if (onlyNumber > 9999) {
+    if (Number(value) > 9999) {
       return;
     }
 
@@ -62,7 +60,7 @@ const Date = () => {
       ...formData,
       [grade]: {
         ...formData[grade],
-        [id]: onlyNumber,
+        [id]: Number(value.trim()),
       },
     });
   };
@@ -110,8 +108,8 @@ const Date = () => {
                   {count.toLocaleString()}
                 </label>
                 <input
-                  type='text'
-                  className='w-full opacity-0 '
+                  type='number'
+                  className='w-full text-transparent'
                   id='count'
                   autoComplete='off'
                   value={count}
@@ -123,8 +121,8 @@ const Date = () => {
                   {price.toLocaleString()}
                 </label>
                 <input
-                  type='text'
-                  className='w-full opacity-0'
+                  type='number'
+                  className='w-full text-transparent'
                   id='price'
                   autoComplete='off'
                   value={price}
