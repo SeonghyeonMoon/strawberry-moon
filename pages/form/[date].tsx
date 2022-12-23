@@ -1,13 +1,11 @@
 import { ChangeEvent, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import useCountMutate from '../../hooks/useCountMutate';
 import useCountQuery from '../../hooks/useCountQuery';
 import usePriceMutate from '../../hooks/usePriceMutate';
 import usePriceQuery from '../../hooks/usePriceQuery';
-import { getWeekNumber } from '../../utils/makeCalendar';
 import { makeNextDate, makePrevDate } from '../../utils/makeDateToString';
 import type { Grade, GradeData } from '../../type';
 
@@ -39,20 +37,12 @@ const Date = () => {
     normal: formData.normal.count,
   });
 
-  const { mutate: mutatePrice } = useMutation(
-    ['price', router.query.date?.slice(4, 6)],
-    async () => {
-      return axios
-        .post('/api/price', {
-          month: router.query.date?.slice(0, 6),
-          week: getWeekNumber(router.query.date as string),
-          special: formData.special.price,
-          good: formData.good.price,
-          normal: formData.normal.price,
-        })
-        .then((res) => res.data);
-    },
-  );
+  const { mutateCount } = useCountMutate({
+    date: router.query.date as string,
+    special: formData.special.price,
+    good: formData.good.price,
+    normal: formData.normal.price,
+  });
 
   const handleChange = (grade: Grade) => (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
