@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios/index';
+import axios from 'axios';
 
 type UseCountMutateProps = {
   date: string;

@@ -1,5 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
-import axios from 'axios/index';
+import axios from 'axios';
 import { getWeekNumber } from '../utils/makeCalendar';
 
 type UsePriceMutateProps = {
