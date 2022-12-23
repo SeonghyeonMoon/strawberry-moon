@@ -38,16 +38,16 @@ const Date = () => {
 
   const { mutatePrice } = usePriceMutate({
     date: router.query.date as string,
-    special: formData.special.count,
-    good: formData.good.count,
-    normal: formData.normal.count,
+    special: formData.special.price,
+    good: formData.good.price,
+    normal: formData.normal.price,
   });
 
   const { mutateCount } = useCountMutate({
     date: router.query.date as string,
-    special: formData.special.price,
-    good: formData.good.price,
-    normal: formData.normal.price,
+    special: formData.special.count,
+    good: formData.good.count,
+    normal: formData.normal.count,
   });
 
   const handleChange = (grade: Grade) => (e: ChangeEvent<HTMLInputElement>) => {
