@@ -48,7 +48,13 @@ const MonthCountChart = ({ date }: MonthCountChartProps) => {
         setStatisticsData(newData);
       },
       onError: () => {
-        setStatisticsData([]);
+        setStatisticsData(
+          Array.from({ length: lastDate }, () => ({
+            special: 0,
+            good: 0,
+            normal: 0,
+          })),
+        );
       },
       retry: false,
       enabled: !!date,
