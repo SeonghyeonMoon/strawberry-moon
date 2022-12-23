@@ -5,6 +5,7 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
 import useCountQuery from '../../hooks/useCountQuery';
+import usePriceMutate from '../../hooks/usePriceMutate';
 import usePriceQuery from '../../hooks/usePriceQuery';
 import { getWeekNumber } from '../../utils/makeCalendar';
 import { makeNextDate, makePrevDate } from '../../utils/makeDateToString';
@@ -31,19 +32,12 @@ const Date = () => {
     [router.query.date],
   );
 
-  const { mutate: mutateCount } = useMutation(
-    ['count', router.query.date?.slice(4, 6)],
-    async () => {
-      return axios
-        .post('/api/count', {
-          date: router.query.date,
-          special: formData.special.count,
-          good: formData.good.count,
-          normal: formData.normal.count,
-        })
-        .then((res) => res.data);
-    },
-  );
+  const { mutatePrice } = usePriceMutate({
+    date: router.query.date as string,
+    special: formData.special.count,
+    good: formData.good.count,
+    normal: formData.normal.count,
+  });
 
   const { mutate: mutatePrice } = useMutation(
     ['price', router.query.date?.slice(4, 6)],
