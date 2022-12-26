@@ -2,6 +2,7 @@ import { ChangeEvent, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import FormTableHeader from '../../components/form/FormTableHeader';
 import NumberInput from '../../components/form/NumberInput';
 import useCountMutate from '../../hooks/useCountMutate';
 import useCountQuery from '../../hooks/useCountQuery';
@@ -94,14 +95,7 @@ const Date = () => {
         </button>
       </h1>
       <table className='mb-4'>
-        <thead>
-          <tr className='p-2 text-left'>
-            <th className='border p-2'>등급</th>
-            <th className='border p-2'>수량(개)</th>
-            <th className='border p-2'>단가(원)</th>
-            <th className='border p-2'>판매금액(원)</th>
-          </tr>
-        </thead>
+        <FormTableHeader />
         <tbody>
           {Object.entries(formData).map(([grade, { label, price, count }]) => (
             <tr key={grade} className='border text-left'>
