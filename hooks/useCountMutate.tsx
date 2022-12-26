@@ -14,7 +14,7 @@ const UseCountMutate = ({
   good,
   normal,
 }: UseCountMutateProps) => {
-  const { mutate: mutateCount } = useMutation(
+  const { mutate: mutateCount, isSuccess } = useMutation(
     ['count', date?.slice(4, 6)],
     async () => {
       return axios
@@ -28,7 +28,7 @@ const UseCountMutate = ({
     },
   );
 
-  return { mutateCount };
+  return { mutateCount, isSuccess };
 };
 
 export default UseCountMutate;

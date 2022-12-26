@@ -15,7 +15,7 @@ const UsePriceMutate = ({
   good,
   normal,
 }: UsePriceMutateProps) => {
-  const { mutate: mutatePrice } = useMutation(
+  const { mutate: mutatePrice, isSuccess } = useMutation(
     ['price', date?.slice(4, 6)],
     async () => {
       return axios
@@ -30,7 +30,7 @@ const UsePriceMutate = ({
     },
   );
 
-  return { mutatePrice };
+  return { mutatePrice, isSuccess };
 };
 
 export default UsePriceMutate;
