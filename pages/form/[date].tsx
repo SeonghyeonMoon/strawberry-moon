@@ -1,14 +1,13 @@
 import { ChangeEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import FormHeader from '../../components/form/FormHeader';
 import FormTableHeader from '../../components/form/FormTableHeader';
 import NumberInput from '../../components/form/NumberInput';
 import Loading from '../../components/Loading';
-import useCountMutate from '../../hooks/useCountMutate';
 import useCountQuery from '../../hooks/useCountQuery';
-import usePriceMutate from '../../hooks/usePriceMutate';
+import UseFormSubmit from '../../hooks/useFormSubmit';
 import usePriceQuery from '../../hooks/usePriceQuery';
 import type { Grade, GradeData } from '../../type';
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,18 +31,21 @@ const Date = () => {
     setFormData,
   });
 
-  const { mutateCount, isSuccess: isCountSuccess } = useCountMutate({
+  const { mutate } = UseFormSubmit({
     date: router.query.date as string,
-    special: formData.special.count,
-    good: formData.good.count,
-    normal: formData.normal.count,
-  });
-
-  const { mutatePrice, isSuccess: isPriceSuccess } = usePriceMutate({
-    date: router.query.date as string,
-    special: formData.special.price,
-    good: formData.good.price,
-    normal: formData.normal.price,
+    count: {
+      special: formData.special.count,
+      good: formData.good.count,
+      normal: formData.normal.count,
+    },
+    price: {
+      special: formData.special.price,
+      good: formData.good.price,
+      normal: formData.normal.price,
+    },
+    handleSuccess: () => {
+      setIsFormChanged(false);
+    },
   });
 
   const handleChange = (grade: Grade) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -64,28 +66,7 @@ const Date = () => {
 
   const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    await mutateCount();
-    await mutatePrice();
-    if (isCountSuccess && isPriceSuccess) {
-      toast.success('등록되었습니다.', {
-        position: 'top-center',
-        autoClose: 500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        theme: 'light',
-      });
-    } else {
-      toast.error('등록에 실패했습니다.', {
-        position: 'top-center',
-        autoClose: 500,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        theme: 'light',
-      });
-    }
-    setIsFormChanged(false);
+    mutate();
   };
 
   useEffect(() => {
@@ -107,7 +88,14 @@ const Date = () => {
       className='relative flex w-full flex-col gap-2 py-8 px-4'
       onSubmit={handleSubmit}
     >
-      <ToastContainer />
+      <ToastContainer
+        position='top-center'
+        autoClose={500}
+        hideProgressBar={false}
+        closeOnClick
+        pauseOnHover
+        theme='light'
+      />
       <FormHeader date={router.query.date} />
       <table className='mb-4'>
         <FormTableHeader />
