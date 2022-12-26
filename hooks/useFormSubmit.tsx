@@ -34,7 +34,9 @@ const UseFormSubmit = ({
       ]),
     {
       onSuccess: () => {
-        toast.success('등록되었습니다.');
+        setTimeout(() => {
+          toast.success('등록되었습니다.');
+        }, 0);
         handleSuccess?.();
       },
       onError: () => {
