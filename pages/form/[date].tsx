@@ -137,9 +137,12 @@ const Date = () => {
       >
         등록
       </button>
-      <button type='button' className='rounded p-2 text-gray-600'>
-        <Link href={'/calendar'}>취소</Link>
-      </button>
+      <Link
+        href={'/calendar'}
+        className='block rounded p-2 text-center text-gray-400'
+      >
+        취소
+      </Link>
     </form>
   );
 };

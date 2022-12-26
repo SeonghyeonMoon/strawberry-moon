@@ -53,7 +53,7 @@ const Calendar = () => {
         moveToPrevMonth={moveToPrevMonth}
         moveToNextMonth={moveToNextMonth}
       />
-      <table>
+      <table className='mb-8'>
         <Days />
         <tbody>
           {calendarData?.map((week, index) => (

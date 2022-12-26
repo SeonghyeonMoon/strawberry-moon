@@ -9,30 +9,24 @@ type TdProps = {
 };
 
 const Td = ({ index, dateData, date, isToday }: TdProps) => {
+  if (!date) {
+    return <td></td>;
+  }
+
+  const color = index === 0 ? 'red-600' : index === 6 ? 'blue-600' : 'black';
+
   return (
-    <td
-      className={`
-        py-5 text-center 
-        ${index === 0 ? 'text-red-600' : ''} 
-        ${index === 6 ? 'text-blue-600' : ''}`}
-    >
+    <td className={`text-center text-${color}`}>
       <Link href={`/form/${makeDateToString(dateData, date)}`}>
-        {date ? (
-          isToday ? (
-            <span
-              className={`
-              border-b-2 border-black font-bold
-              ${index === 0 ? 'border-red-600' : ''} 
-              ${index === 6 ? 'border-blue-600' : ''}`}
-            >
-              {date}
-            </span>
-          ) : (
-            <span>{date}</span>
-          )
-        ) : (
-          ''
-        )}
+        <p className='border-black p-3'>
+          <span
+            className={`border-b-2 ${
+              isToday ? `border-b-${color} font-bold` : 'border-b-transparent'
+            }`}
+          >
+            {date}
+          </span>
+        </p>
       </Link>
     </td>
   );
