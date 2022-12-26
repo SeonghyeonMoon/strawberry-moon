@@ -118,11 +118,11 @@ const Date = () => {
       <button
         type='submit'
         disabled={!isFormChanged}
-        className='rounded bg-gray-600 p-2 text-white disabled:opacity-50'
+        className='rounded bg-gray-600 p-2 text-white transition disabled:opacity-10'
       >
         등록
       </button>
-      <button type='button' className='rounded p-2 text-gray-300'>
+      <button type='button' className='rounded p-2 text-gray-600'>
         <Link href={'/calendar'}>취소</Link>
       </button>
     </form>
