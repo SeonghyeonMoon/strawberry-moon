@@ -1,4 +1,4 @@
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, KeyboardEvent } from 'react';
 import type { Grade } from '../../type';
 
 type NumberInputProps = {
@@ -14,6 +14,12 @@ const NumberInput = ({
   grade,
   handleChange,
 }: NumberInputProps) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode >= 37 && e.keyCode <= 40) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <>
       <label htmlFor={type} className='absolute left-2 top-2 z-10'>
@@ -26,6 +32,7 @@ const NumberInput = ({
         autoComplete='off'
         value={value}
         onChange={handleChange(grade)}
+        onKeyDown={handleKeyDown}
       />
     </>
   );
