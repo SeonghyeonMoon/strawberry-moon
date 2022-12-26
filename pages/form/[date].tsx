@@ -50,17 +50,19 @@ const Date = () => {
 
   const handleChange = (grade: Grade) => (e: ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-    if (Number(value) > 9999) {
+    const onlyNumber = Number(value.replace(/[^0-9]/g, ''));
+
+    if (onlyNumber > 9999) {
       return;
     }
 
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       [grade]: {
-        ...formData[grade],
-        [id]: Number(value.trim()),
+        ...prev[grade],
+        [id]: onlyNumber,
       },
-    });
+    }));
     setIsFormChanged(true);
   };
 
@@ -105,7 +107,7 @@ const Date = () => {
           {Object.entries(formData).map(([grade, { label, price, count }]) => (
             <tr key={grade} className='border text-left'>
               <td className='w-10 border p-2'>{label}</td>
-              <td className='relative w-16 border p-2'>
+              <td className='relative w-16 border'>
                 <NumberInput
                   type='count'
                   value={count}
@@ -113,7 +115,7 @@ const Date = () => {
                   handleChange={handleChange}
                 />
               </td>
-              <td className='relative w-16 border p-2'>
+              <td className='relative w-16 border'>
                 <NumberInput
                   type='price'
                   value={price}
