@@ -70,6 +70,7 @@ const Date = () => {
     e.preventDefault();
     if (isFormChanged) {
       mutate();
+      (document.activeElement as HTMLElement).blur();
     }
   };
 
