@@ -1,9 +1,9 @@
-import { SyncLoader } from 'react-spinners';
+import { DotLoader } from 'react-spinners';
 
 const Loading = () => {
   return (
     <div className='flex h-screen w-screen items-center justify-center'>
-      <SyncLoader color='#48515f' />
+      <DotLoader color='#48515f' />
     </div>
   );
 };
