@@ -2,6 +2,7 @@ import { ChangeEvent, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import NumberInput from '../../components/form/NumberInput';
 import useCountMutate from '../../hooks/useCountMutate';
 import useCountQuery from '../../hooks/useCountQuery';
 import usePriceMutate from '../../hooks/usePriceMutate';
@@ -106,29 +107,15 @@ const Date = () => {
             <tr key={grade} className='border text-left'>
               <td className='w-10 border p-2'>{label}</td>
               <td className='relative w-16 border p-2'>
-                <label htmlFor='count' className='absolute left-2 top-2 z-10'>
-                  {count.toLocaleString()}
-                </label>
-                <input
-                  type='number'
-                  className='absolute inset-0 border-b-2 border-gray-600 text-transparent opacity-0 outline-0 transition-all focus:opacity-100'
-                  id='count'
-                  autoComplete='off'
+                <NumberInput
                   value={count}
-                  onChange={handleChange(grade as Grade)}
+                  handleChange={() => handleChange(grade as Grade)}
                 />
               </td>
               <td className='relative w-16 border p-2'>
-                <label htmlFor='price' className='absolute left-2 top-2 z-10'>
-                  {price.toLocaleString()}
-                </label>
-                <input
-                  type='number'
-                  className='absolute inset-0 border-b-2 border-gray-600 text-transparent opacity-0 outline-0 transition-all focus:opacity-100'
-                  id='price'
-                  autoComplete='off'
+                <NumberInput
                   value={price}
-                  onChange={handleChange(grade as Grade)}
+                  handleChange={() => handleChange(grade as Grade)}
                 />
               </td>
               <td className='w-24 border p-2'>
