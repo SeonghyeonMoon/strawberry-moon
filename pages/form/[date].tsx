@@ -66,7 +66,9 @@ const Date = () => {
 
   const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    mutate();
+    if (isFormChanged) {
+      mutate();
+    }
   };
 
   useEffect(() => {
