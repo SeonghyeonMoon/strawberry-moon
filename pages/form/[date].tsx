@@ -17,6 +17,7 @@ const Date = () => {
     good: { label: '상', price: 0, count: 0 },
     normal: { label: '보통', price: 0, count: 0 },
   });
+  const [isFormChanged, setIsFormChanged] = useState(false);
 
   useCountQuery({ date: router.query.date as string, setFormData });
   usePriceQuery({ date: router.query.date as string, setFormData });
@@ -63,6 +64,7 @@ const Date = () => {
         [id]: Number(value.trim()),
       },
     });
+    setIsFormChanged(true);
   };
 
   const handleSubmit = (e: ChangeEvent<HTMLFormElement>) => {
@@ -136,7 +138,11 @@ const Date = () => {
           ))}
         </tbody>
       </table>
-      <button type='submit' className='rounded bg-gray-300 p-2 text-white'>
+      <button
+        type='submit'
+        disabled={!isFormChanged}
+        className='rounded bg-gray-600 p-2 text-white disabled:opacity-50'
+      >
         등록
       </button>
       <button type='button' className='rounded p-2 text-gray-300'>
