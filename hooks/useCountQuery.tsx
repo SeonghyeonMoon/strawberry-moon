@@ -9,7 +9,7 @@ type UseCountQueryProps = {
 };
 
 const useCountQuery = ({ date, setFormData }: UseCountQueryProps) => {
-  useQuery(
+  const { isLoading } = useQuery(
     ['count', date],
     () => axios.get(`/api/count?date=${date}`).then((res) => res.data),
     {
@@ -37,6 +37,7 @@ const useCountQuery = ({ date, setFormData }: UseCountQueryProps) => {
       retry: false,
     },
   );
+  return { isLoading };
 };
 
 export default useCountQuery;

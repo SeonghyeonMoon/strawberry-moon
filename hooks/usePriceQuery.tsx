@@ -10,7 +10,7 @@ type UsePriceQueryProps = {
 };
 
 const usePriceQuery = ({ date, setFormData }: UsePriceQueryProps) => {
-  useQuery(
+  const { isLoading } = useQuery(
     ['price', date],
     () =>
       axios
@@ -52,6 +52,7 @@ const usePriceQuery = ({ date, setFormData }: UsePriceQueryProps) => {
       retry: false,
     },
   );
+  return { isLoading };
 };
 
 export default usePriceQuery;

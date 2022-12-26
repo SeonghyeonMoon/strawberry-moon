@@ -1,9 +1,10 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import FormHeader from '../../components/form/FormHeader';
 import FormTableHeader from '../../components/form/FormTableHeader';
 import NumberInput from '../../components/form/NumberInput';
+import Loading from '../../components/Loading';
 import useCountMutate from '../../hooks/useCountMutate';
 import useCountQuery from '../../hooks/useCountQuery';
 import usePriceMutate from '../../hooks/usePriceMutate';
@@ -18,9 +19,16 @@ const Date = () => {
     normal: { label: '보통', price: 0, count: 0 },
   });
   const [isFormChanged, setIsFormChanged] = useState(false);
+  const [initLoading, setInitLoading] = useState(true);
 
-  useCountQuery({ date: router.query.date as string, setFormData });
-  usePriceQuery({ date: router.query.date as string, setFormData });
+  const { isLoading: isCountLoading } = useCountQuery({
+    date: router.query.date as string,
+    setFormData,
+  });
+  const { isLoading: isPriceLoading } = usePriceQuery({
+    date: router.query.date as string,
+    setFormData,
+  });
 
   const { mutatePrice } = usePriceMutate({
     date: router.query.date as string,
@@ -57,6 +65,20 @@ const Date = () => {
     mutateCount();
     mutatePrice();
   };
+
+  useEffect(() => {
+    setInitLoading(true);
+    const timeOut = setTimeout(() => {
+      setInitLoading(false);
+    }, 500);
+    return () => {
+      clearTimeout(timeOut);
+    };
+  }, [router.query.date]);
+
+  if (initLoading || isCountLoading || isPriceLoading) {
+    return <Loading />;
+  }
 
   return (
     <form
