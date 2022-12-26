@@ -1,15 +1,13 @@
-import { ChangeEvent, useMemo, useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { AiOutlineLeft, AiOutlineRight } from 'react-icons/ai';
+import FormHeader from '../../components/form/FormHeader';
 import FormTableHeader from '../../components/form/FormTableHeader';
 import NumberInput from '../../components/form/NumberInput';
 import useCountMutate from '../../hooks/useCountMutate';
 import useCountQuery from '../../hooks/useCountQuery';
 import usePriceMutate from '../../hooks/usePriceMutate';
 import usePriceQuery from '../../hooks/usePriceQuery';
-import useSwipe from '../../hooks/useSwipe';
-import { makeNextDate, makePrevDate } from '../../utils/makeDateToString';
 import type { Grade, GradeData } from '../../type';
 
 const Date = () => {
@@ -23,21 +21,6 @@ const Date = () => {
 
   useCountQuery({ date: router.query.date as string, setFormData });
   usePriceQuery({ date: router.query.date as string, setFormData });
-
-  const prevDate = useMemo(
-    () => router.query.date && makePrevDate(router.query.date as string),
-    [router.query.date],
-  );
-
-  const nextDate = useMemo(
-    () => router.query.date && makeNextDate(router.query.date as string),
-    [router.query.date],
-  );
-
-  useSwipe({
-    handleSwipeRight: () => router.push(`/form/${prevDate}`),
-    handleSwipeLeft: () => router.push(`/form/${nextDate}`),
-  });
 
   const { mutatePrice } = usePriceMutate({
     date: router.query.date as string,
@@ -80,20 +63,7 @@ const Date = () => {
       className='flex w-full flex-col gap-2 py-8 px-4'
       onSubmit={handleSubmit}
     >
-      <h1 className='mb-8 flex items-center justify-center justify-between gap-7 text-2xl'>
-        <button>
-          <Link href={`/form/${prevDate}`}>
-            <AiOutlineLeft />
-          </Link>
-        </button>
-        {router.query.date?.slice(0, 4)}년 {router.query.date?.slice(4, 6)}월{' '}
-        {router.query.date?.slice(6)}일
-        <button>
-          <Link href={`/form/${nextDate}`}>
-            <AiOutlineRight />
-          </Link>
-        </button>
-      </h1>
+      <FormHeader date={router.query.date} />
       <table className='mb-4'>
         <FormTableHeader />
         <tbody>
