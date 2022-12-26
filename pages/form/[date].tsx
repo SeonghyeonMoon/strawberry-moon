@@ -72,14 +72,18 @@ const Date = () => {
               <td className='w-10 border p-2'>{label}</td>
               <td className='relative w-16 border p-2'>
                 <NumberInput
+                  type='count'
                   value={count}
-                  handleChange={() => handleChange(grade as Grade)}
+                  grade={grade as Grade}
+                  handleChange={handleChange}
                 />
               </td>
               <td className='relative w-16 border p-2'>
                 <NumberInput
+                  type='price'
                   value={price}
-                  handleChange={() => handleChange(grade as Grade)}
+                  grade={grade as Grade}
+                  handleChange={handleChange}
                 />
               </td>
               <td className='w-24 border p-2'>
