@@ -14,14 +14,13 @@ const Td = ({ index, dateData, date, isToday }: TdProps) => {
   }
 
   const color = index === 0 ? 'red-600' : index === 6 ? 'blue-600' : 'black';
-
   return (
     <td className={`text-center text-${color}`}>
       <Link href={`/form/${makeDateToString(dateData, date)}`}>
-        <p className='border-black p-3'>
+        <p className='p-3'>
           <span
             className={`border-b-2 ${
-              isToday ? `border-b-${color} font-bold` : 'border-b-transparent'
+              isToday ? `font-bold border-b-${color}` : 'border-b-transparent'
             }`}
           >
             {date}
