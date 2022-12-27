@@ -43,9 +43,6 @@ const Date = () => {
       good: formData.good.price,
       normal: formData.normal.price,
     },
-    handleSuccess: () => {
-      setIsFormChanged(false);
-    },
   });
 
   const handleChange = (grade: Grade) => (e: ChangeEvent<HTMLInputElement>) => {
@@ -69,8 +66,9 @@ const Date = () => {
   const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (isFormChanged) {
-      mutate();
+      setIsFormChanged(false);
       (document.activeElement as HTMLElement).blur();
+      mutate();
     }
   };
 
